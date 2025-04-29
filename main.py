@@ -140,7 +140,3 @@ def generate_text(model, start_string, gen_length=500):
 
 # Generate text starting with "To be, or not to be"
 print(generate_text(model, start_string="To be, or not to be"))
-
-
-
-
