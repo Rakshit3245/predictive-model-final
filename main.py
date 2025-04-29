@@ -6,7 +6,6 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import string
 import os
 from constant import DATA_PATH, DATA_NOT_FOUND, CHARACTERS_COUNT, VOCAB_COUNT, INPUT, OUTPUT, SEQUENCES_COUNT
-print(tf.__version__)
 
 # TASK 1 : Dataset Loading and Preprocessing
 
@@ -30,8 +29,6 @@ def preprocess_text(text):
 
 
 text = preprocess_text(text)
-# print(text)
-
 
 # Tokenize the text into sequences of words or characters
 chars = sorted(list(set(text)))
@@ -62,10 +59,7 @@ print(INPUT.format(X.shape))
 print(OUTPUT.format(Y.shape))
 print(SEQUENCES_COUNT.format(len(X)))
 
-
-
 # Task 2 : Model Design:
-
 vocab_size = len(chars)
 seq_length = 100
 embedding_dim = 64
@@ -100,7 +94,6 @@ checkpoint = ModelCheckpoint(
     save_best_only=True
 )
 
-
 history = model.fit(
     X_train, y_train,
     validation_data=(X_val, y_val),
@@ -110,13 +103,27 @@ history = model.fit(
 )
 
 
+# 4 Text Generation
 def generate_text(model, start_string, gen_length=500):
+    """
+    Generate text using a trained character-level language model.
+
+    Args:
+        model : Trained character-level text generation mode
+        start_string: text to start generation
+        gen_length : Number of characters to generate
+    Returns:
+        str: Generated text starting from the start_string followed by gen_length characters
+    """
+
+    # Convert each character in the seed string to its corresponding index
     input_eval = [char_index[s] for s in start_string.lower() if s in char_index]
     input_eval = tf.expand_dims(input_eval, 0)
 
     generated_text = []
 
     for _ in range(gen_length):
+        # Predict the next character
         predictions = model(input_eval)
         predictions = tf.squeeze(predictions, 0)
 
@@ -127,6 +134,7 @@ def generate_text(model, start_string, gen_length=500):
 
         input_eval = tf.concat([input_eval[:1:], [[predicted_id]]], axis=-1)
 
+    # Combine the original seed text with the generated characters
     return start_string + ''.join(generated_text)
 
 
