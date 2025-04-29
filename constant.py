@@ -1,0 +1,7 @@
+DATA_PATH = "dataset.txt"
+DATA_NOT_FOUND = "Data set file is not found"
+CHARACTERS_COUNT = "Dataset characters length :{}"
+VOCAB_COUNT = "Vocabulary size : {}"
+INPUT = "Input : {} "
+OUTPUT = "Output : {} "
+SEQUENCES_COUNT = "Number of training sequences : {}"
